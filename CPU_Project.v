@@ -10,19 +10,19 @@ module 	Instruction_RAM	(
 	assign ram[1] = 32'h10864000; //SUB Rs1[1],Rd[3],Rs2[2]; >>>>>>>>> R[3] = 7-1 = 6 --> R[2] = 7 <--
 	
 	//Type1
-	//assign ram[0] = 32'h00880012; //ANDI Rs[2], Rd[4], #2;  
-	//assign ram[1] = 32'h08CA001A; //ADDI Rs[3], Rd[5], #3;
-	//assign ram[1] = 32'h1002002A; //LW Rs[0], Rd[1], #5;
-	//assign ram[0] = 32'h1804002A; //SW Rs[0], Rd[2], #5;
-	//assign ram[0] = 32'h2002002A; //BEQ Rs[0], Rd[1], #5; 
+	assign ram[2] = 32'h00880012; //ANDI Rs[2], Rd[4], #2;  
+	assign ram[3] = 32'h08CA001A; //ADDI Rs[3], Rd[5], #3;
+	assign ram[4] = 32'h1002002A; //LW Rs[0], Rd[1], #5;
+	assign ram[5] = 32'h1804002A; //SW Rs[0], Rd[2], #5;
+	assign ram[6] = 32'h2002002A; //BEQ Rs[0], Rd[1], #5; 
 	
 	//Type2
-	//assign ram[0] = 32'h0000002C; //J #5;
-	//assign ram[5] = 32'h0800007C;
+	assign ram[7] = 32'h0000002C; //J #5;
+	assign ram[8] = 32'h0800007C;
 	
 	//Type3
-	//assign ram[6] = 32'h000C1286;
-	//assign ram[7] = 32'h180E2307;
+	assign ram[9] = 32'h000C1286;
+	assign ram[10] = 32'h180E2307;
 	
 		
 	assign instruction = ram[address];
@@ -1535,15 +1535,15 @@ module DataPath (clk, Result, addRs1,addRs2,addRD,TRs1,TRs2,RD, OP, Ty, ins, PC,
 		
 		PC <= PC+1;
 		
-		//if(PCSrc == 2)begin
-		//	PC <= immediateEx + PC +1;
-		//end
-		//if (PCSrc== 1)begin
-		//	PC <= SignedImmediate;
-		//end
-		//if (PCSrc ==0)begin
-		//	PC <= PC+1;
-		//end
+		if(PCSrc == 2)begin
+			PC <= immediateEx + PC +1;
+		end
+		if (PCSrc== 1)begin
+			PC <= SignedImmediate;
+		end
+		if (PCSrc ==0)begin
+			PC <= PC+1;
+		end
 		
 			
 		
@@ -1552,47 +1552,3 @@ module DataPath (clk, Result, addRs1,addRs2,addRD,TRs1,TRs2,RD, OP, Ty, ins, PC,
 	
 endmodule
 
-
-module TS_CPU ();
-	reg clk;
-	wire [31:0] Result;
-	wire [31:0] Rs1;
-	wire [31:0] Rs2;
-	wire [31:0] RD;
-	wire [4:0] OP;
-	wire [1:0] Ty, PCSrc;
-	wire [4:0] addRs1;
-	wire [4:0] addRs2;
-	wire [4:0] addRD;
-	wire [31:0] ins;
-	wire [31:0] PC;
-	
-	
-	DataPath Label1 (.clk(clk),
-		.Result(Result),
-		.addRs1(addRs1),
-		.addRs2(addRs2),
-		.addRD(addRD),
-		.TRs1(Rs1),
-		.TRs2(Rs2),
-		.RD(RD),
-		.OP(OP),
-		.Ty(Ty),
-		.ins(ins),
-		.PC(PC),
-		.PCSrc(PCSrc)
-	);
-	
-	initial
-		begin
-			clk =0;
-			#20 clk=1;
-			#20 clk=0;
-			#20 clk=1;
-			#20 clk=0;
-			#20 clk=1;
-			#20 clk=0;
-			#20 $finish;
-		end
-		
-endmodule
